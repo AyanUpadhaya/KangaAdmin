@@ -1,0 +1,165 @@
+<template>
+  <section class="h-full relative overflow-auto no-scrollbar">
+    <SearchLoader v-if="isLoading"></SearchLoader>
+    <SomethingWrong v-else-if="!isLoading && isError"></SomethingWrong>
+    <div class="flex flex-col gap-6" v-else>
+      <!-- Cards -->
+      <div class="w-full">
+        <!-- Title -->
+        <div>
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch gap-6"
+          >
+            <!-- Card one -->
+            <Card :data="item" :key="i" v-for="(item, i) in data" />
+          </div>
+        </div>
+        <!-- ChartsArea -->
+      </div>
+
+      <ChartsArea></ChartsArea>
+    </div>
+  </section>
+</template>
+
+<script>
+import Card from "../../components/elements/Card.vue";
+import { chart, arrowdrop } from "../../assets/getAssets.js";
+import ChartsArea from "../../components/charts/ChartsArea.vue";
+import Nodata from "../../components/shared/nodata/Nodata.vue";
+import SearchLoader from "../../components/loaders/SearchLoader.vue";
+import SomethingWrong from "../../components/shared/ui/SomethingWrong/SomethingWrong.vue";
+
+export default {
+  components: {
+    Card,
+    ChartsArea,
+    Nodata,
+    SearchLoader,
+    SomethingWrong,
+  },
+  data() {
+    return {
+      data: [
+        {
+          id: 1,
+          title: "Earning",
+          number: "6,784",
+          background: "bg-white",
+          svgBg: "bg-[#FBEECA]",
+          svg: `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+  <path d="M20.5 4H4.5C3.39 4 2.51 4.89 2.51 6L2.5 18C2.5 19.11 3.39 20 4.5 20H20.5C21.61 20 22.5 19.11 22.5 18V6C22.5 4.89 21.61 4 20.5 4ZM20.5 17C20.5 17.55 20.05 18 19.5 18H5.5C4.95 18 4.5 17.55 4.5 17V7C4.5 6.45 4.95 6 5.5 6H19.5C20.05 6 20.5 6.45 20.5 7V17ZM14.5 10C15.05 10 15.5 9.55 15.5 9C15.5 8.45 15.05 8 14.5 8H13.5V7.99C13.5 7.44 13.05 6.99 12.5 6.99C11.95 6.99 11.5 7.44 11.5 7.99V8H10.5C9.95 8 9.5 8.45 9.5 9V12C9.5 12.55 9.95 13 10.5 13H13.5V14H10.5C9.95 14 9.5 14.45 9.5 15C9.5 15.55 9.95 16 10.5 16H11.5C11.5 16.55 11.95 17 12.5 17C13.05 17 13.5 16.55 13.5 16H14.5C15.05 16 15.5 15.55 15.5 15V12C15.5 11.45 15.05 11 14.5 11H11.5V10H14.5Z" fill="#F2C963"/>
+</svg>`,
+          type: "numbers",
+          inDollars: true,
+        },
+        {
+          id: 1,
+          title: "Business Withdrawn",
+          number: "5225",
+          background: "bg-white",
+          svgBg: "bg-[#FBEECA]",
+          svg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M4.5 11.8714V15.8714C4.5 16.7014 5.17 17.3714 6 17.3714C6.83 17.3714 7.5 16.7014 7.5 15.8714V11.8714C7.5 11.0414 6.83 10.3714 6 10.3714C5.17 10.3714 4.5 11.0414 4.5 11.8714ZM10.5 11.8714V15.8714C10.5 16.7014 11.17 17.3714 12 17.3714C12.83 17.3714 13.5 16.7014 13.5 15.8714V11.8714C13.5 11.0414 12.83 10.3714 12 10.3714C11.17 10.3714 10.5 11.0414 10.5 11.8714ZM4 22.3714H20C20.83 22.3714 21.5 21.7014 21.5 20.8714C21.5 20.0414 20.83 19.3714 20 19.3714H4C3.17 19.3714 2.5 20.0414 2.5 20.8714C2.5 21.7014 3.17 22.3714 4 22.3714ZM16.5 11.8714V15.8714C16.5 16.7014 17.17 17.3714 18 17.3714C18.83 17.3714 19.5 16.7014 19.5 15.8714V11.8714C19.5 11.0414 18.83 10.3714 18 10.3714C17.17 10.3714 16.5 11.0414 16.5 11.8714ZM11.07 1.86141L3.17 6.02141C2.76 6.23141 2.5 6.66141 2.5 7.12141C2.5 7.81141 3.06 8.37141 3.75 8.37141H20.26C20.94 8.37141 21.5 7.81141 21.5 7.12141C21.5 6.66141 21.24 6.23141 20.83 6.02141L12.93 1.86141C12.35 1.55141 11.65 1.55141 11.07 1.86141Z" fill="#F2C963"/>
+</svg>`,
+          type: "numbers",
+          inDollars: true,
+        },
+        {
+          id: 1,
+          title: "Business Onboarded",
+          number: "225",
+          background: "bg-white",
+          svgBg: "bg-[#FBEECA]",
+          svg: `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+  <path d="M12.5 7V5C12.5 3.9 11.6 3 10.5 3H4.5C3.4 3 2.5 3.9 2.5 5V19C2.5 20.1 3.4 21 4.5 21H20.5C21.6 21 22.5 20.1 22.5 19V9C22.5 7.9 21.6 7 20.5 7H12.5ZM6.5 19H4.5V17H6.5V19ZM6.5 15H4.5V13H6.5V15ZM6.5 11H4.5V9H6.5V11ZM6.5 7H4.5V5H6.5V7ZM10.5 19H8.5V17H10.5V19ZM10.5 15H8.5V13H10.5V15ZM10.5 11H8.5V9H10.5V11ZM10.5 7H8.5V5H10.5V7ZM19.5 19H12.5V17H14.5V15H12.5V13H14.5V11H12.5V9H19.5C20.05 9 20.5 9.45 20.5 10V18C20.5 18.55 20.05 19 19.5 19ZM18.5 11H16.5V13H18.5V11ZM18.5 15H16.5V17H18.5V15Z" fill="#F2C963"/>
+</svg>`,
+          type: "numbers",
+          inDollars: false,
+        },
+        {
+          id: 1,
+          title: "User Onboarded",
+          number: "29982",
+          background: "bg-white",
+          svgBg: "bg-[#FBEECA]",
+          svg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M16 11C17.66 11 18.99 9.66 18.99 8C18.99 6.34 17.66 5 16 5C14.34 5 13 6.34 13 8C13 9.66 14.34 11 16 11ZM8 11C9.66 11 10.99 9.66 10.99 8C10.99 6.34 9.66 5 8 5C6.34 5 5 6.34 5 8C5 9.66 6.34 11 8 11ZM8 13C5.67 13 1 14.17 1 16.5V18C1 18.55 1.45 19 2 19H14C14.55 19 15 18.55 15 18V16.5C15 14.17 10.33 13 8 13ZM16 13C15.71 13 15.38 13.02 15.03 13.05C15.05 13.06 15.06 13.08 15.07 13.09C16.21 13.92 17 15.03 17 16.5V18C17 18.35 16.93 18.69 16.82 19H22C22.55 19 23 18.55 23 18V16.5C23 14.17 18.33 13 16 13Z" fill="#F2C963"/>
+</svg>`,
+          type: "numbers",
+          inDollars: false,
+        },
+        {
+          id: 1,
+          title: "Total Services",
+          number: "784",
+          background: "bg-white",
+          svgBg: "bg-[#FBEECA]",
+          svg: `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+  <path d="M11.15 2.93996L7.43 9.01996C7.02 9.67996 7.5 10.54 8.28 10.54H15.71C16.49 10.54 16.97 9.67996 16.56 9.01996L12.85 2.93996C12.46 2.29996 11.54 2.29996 11.15 2.93996Z" fill="#F2C963"/>
+  <path d="M17.5 21.54C19.9853 21.54 22 19.5252 22 17.04C22 14.5547 19.9853 12.54 17.5 12.54C15.0147 12.54 13 14.5547 13 17.04C13 19.5252 15.0147 21.54 17.5 21.54Z" fill="#F2C963"/>
+  <path d="M4 21.04H10C10.55 21.04 11 20.59 11 20.04V14.04C11 13.49 10.55 13.04 10 13.04H4C3.45 13.04 3 13.49 3 14.04V20.04C3 20.59 3.45 21.04 4 21.04Z" fill="#F2C963"/>
+</svg>`,
+          type: "numbers",
+          inDollars: false,
+        },
+        {
+          id: 1,
+          title: "Total Staffs",
+          number: "25",
+          background: "bg-white",
+          svgBg: "bg-[#FBEECA]",
+          svg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M9 13.75C6.66 13.75 2 14.92 2 17.25V19H16V17.25C16 14.92 11.34 13.75 9 13.75ZM4.34 17C5.18 16.42 7.21 15.75 9 15.75C10.79 15.75 12.82 16.42 13.66 17H4.34ZM9 12C10.93 12 12.5 10.43 12.5 8.5C12.5 6.57 10.93 5 9 5C7.07 5 5.5 6.57 5.5 8.5C5.5 10.43 7.07 12 9 12ZM9 7C9.83 7 10.5 7.67 10.5 8.5C10.5 9.33 9.83 10 9 10C8.17 10 7.5 9.33 7.5 8.5C7.5 7.67 8.17 7 9 7ZM16.04 13.81C17.2 14.65 18 15.77 18 17.25V19H22V17.25C22 15.23 18.5 14.08 16.04 13.81ZM15 12C16.93 12 18.5 10.43 18.5 8.5C18.5 6.57 16.93 5 15 5C14.46 5 13.96 5.13 13.5 5.35C14.13 6.24 14.5 7.33 14.5 8.5C14.5 9.67 14.13 10.76 13.5 11.65C13.96 11.87 14.46 12 15 12Z" fill="#F2C963"/>
+</svg>`,
+          type: "numbers",
+          inDollars: false,
+        },
+        {
+          id: 1,
+          title: "Booking",
+          number: "22598",
+          background: "bg-white",
+          svgBg: "bg-[#FBEECA]",
+          svg: `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+  <path d="M17.5 3.5H14.32C13.9 2.34 12.8 1.5 11.5 1.5C10.2 1.5 9.1 2.34 8.68 3.5H5.5C4.4 3.5 3.5 4.4 3.5 5.5V20.5C3.5 21.6 4.4 22.5 5.5 22.5H11.61C11.02 21.93 10.54 21.25 10.19 20.5H5.5V5.5H7.5V6.5C7.5 7.6 8.4 8.5 9.5 8.5H13.5C14.6 8.5 15.5 7.6 15.5 6.5V5.5H17.5V10.58C18.21 10.68 18.88 10.89 19.5 11.18V5.5C19.5 4.4 18.6 3.5 17.5 3.5ZM11.5 5.5C10.95 5.5 10.5 5.05 10.5 4.5C10.5 3.95 10.95 3.5 11.5 3.5C12.05 3.5 12.5 3.95 12.5 4.5C12.5 5.05 12.05 5.5 11.5 5.5ZM16.5 12.5C13.74 12.5 11.5 14.74 11.5 17.5C11.5 20.26 13.74 22.5 16.5 22.5C19.26 22.5 21.5 20.26 21.5 17.5C21.5 14.74 19.26 12.5 16.5 12.5ZM17.79 19.5L16.14 17.85C16.05 17.76 15.99 17.63 15.99 17.5V15.01C15.99 14.73 16.21 14.51 16.49 14.51C16.77 14.51 16.99 14.73 16.99 15.01V17.3L18.49 18.8C18.69 19 18.69 19.31 18.49 19.51C18.3 19.7 17.99 19.7 17.79 19.5Z" fill="#F2C963"/>
+</svg>`,
+          type: "numbers",
+          inDollars: false,
+        },
+        {
+          id: 1,
+          title: "Total Category",
+          number: "62",
+          background: "bg-white",
+          svgBg: "bg-[#FBEECA]",
+          svg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M4 2C2.89543 2 2 2.89543 2 4V8.99733C2 10.1019 2.89543 10.9973 4 10.9973H8.99733C10.1019 10.9973 10.9973 10.1019 10.9973 8.99733V4C10.9973 2.89543 10.1019 2 8.99733 2H4ZM16.7813 2C14.2968 2 12.2827 4.01412 12.2827 6.49867C12.2827 8.98321 14.2968 10.9973 16.7813 10.9973C19.2659 10.9973 21.28 8.98321 21.28 6.49867C21.28 4.01412 19.2659 2 16.7813 2ZM2 14.2827C2 13.1781 2.89543 12.2827 4 12.2827H8.99733C10.1019 12.2827 10.9973 13.1781 10.9973 14.2827V19.28C10.9973 20.3846 10.1019 21.28 8.99733 21.28H4C2.89543 21.28 2 20.3846 2 19.28V14.2827ZM14.2827 12.2827C13.1781 12.2827 12.2827 13.1781 12.2827 14.2827V19.28C12.2827 20.3846 13.1781 21.28 14.2827 21.28H19.28C20.3846 21.28 21.28 20.3846 21.28 19.28V14.2827C21.28 13.1781 20.3846 12.2827 19.28 12.2827H14.2827Z" fill="#F2C963"/>
+</svg>`,
+          type: "numbers",
+          inDollars: false,
+        },
+      ],
+      daysData: [
+        { value: "Last 7 Days" },
+        { value: "Last 30 Days" },
+        { value: "Last 90 Days" },
+      ],
+      selectedDay: "Last 7 Days",
+      chart,
+      arrowdrop,
+      isLoading: false,
+      isError: false,
+    };
+  },
+  methods: {
+    handleDaySelection(value) {
+      this.selectedDay = value;
+    },
+  },
+};
+</script>
+
+<style scoped>
+/* Add your component styles here */
+</style>
